@@ -1,6 +1,10 @@
 $(document).ready(function () {
-  flatpickr("#dateInput", { dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y" });
-  flatpickr("#scanDate", { dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y" });
+  const flatpickrDate = flatpickr("#dateInput", { 
+    dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y" 
+  });
+  const flatpickrScan = flatpickr("#scanDate", { 
+    dateFormat: "Y-m-d", altInput: true, altFormat: "F j, Y" 
+  });  
 
   new Choices("#calcMethod", { searchEnabled: false, itemSelectText: "" });
 
@@ -23,10 +27,81 @@ $(document).ready(function () {
     default: "You're doing amazing, mama! 💖 Keep glowing!"
   };
 
+  const trimesters = [
+    { range: [0, 13], label: "First Trimester: Building foundations 🧬" },
+    { range: [14, 27], label: "Second Trimester: Growing and glowing ✨" },
+    { range: [28, 40], label: "Third Trimester: Getting ready for birth 👶" }
+  ];
+
+  const nutritionAdvice = [
+    "Eat iron-rich foods like lentils, spinach, and fish.",
+    "Include calcium from milk, yogurt, or small fish with bones.",
+    "Take folic acid supplements if not already advised.",
+    "Stay hydrated and eat small, frequent meals.",
+    "Avoid street food and raw fish/meat. Cook well."
+  ];
+
+  const dearMomNotes = {
+    6: "Dear Parent, each flutter of change is your body preparing to nurture. 💞",
+    12: "You're nearing the end of your first trimester. You've done wonderfully! 🌱",
+    20: "Halfway there! Your strength and love shape the journey ahead. 💪",
+    28: "As baby kicks grow stronger, so does your bond. You're amazing. 🤱",
+    36: "You're almost there! Breathe, rest, and know you're ready. ❤️",
+    default: "Every week is a beautiful step forward. Keep going! 🌸"
+  };
+
+  // Load stored values on page load
+  function loadLocalData() {
+    const saved = JSON.parse(localStorage.getItem("pregnancyData") || "{}");
+    
+    if (saved.dateInput) flatpickrDate.setDate(saved.dateInput, true);
+    if (saved.scanDate) flatpickrScan.setDate(saved.scanDate, true);
+    
+    $("#calcMethod").val(saved.method || "").trigger("change");
+    if (saved.dateInput) $("#dateInput").val(saved.dateInput);
+    if (saved.scanDate) $("#scanDate").val(saved.scanDate);
+    if (saved.scanWeeks) $("#scanWeeks").val(saved.scanWeeks);
+    if (saved.scanDays) $("#scanDays").val(saved.scanDays);
+    if (saved.kickCount) {
+      kickCount = saved.kickCount;
+      $("#kickCount").text(kickCount);
+    }
+
+    // Optional: auto-submit to restore summary
+    if (saved.dateInput || saved.scanDate) {
+      setTimeout(() => $("#dateForm").trigger("submit"), 100); 
+    }
+  }
+
+  // Save to local storage
+  function saveLocalData() {
+    const data = {
+      method: $("#calcMethod").val(),
+      dateInput: $("#dateInput").val(),
+      scanDate: $("#scanDate").val(),
+      scanWeeks: $("#scanWeeks").val(),
+      scanDays: $("#scanDays").val(),
+      kickCount: kickCount
+    };
+    localStorage.setItem("pregnancyData", JSON.stringify(data));
+  }
   $("#calcMethod").on("change", function () {
     const selected = $(this).val();
     $("#scanInputs").toggleClass("d-none", selected !== "scan");
     $("#dateInput").closest(".mb-3").toggle(selected !== "scan");
+  });
+
+  let kickCount = 0;
+  $("#kickButton").on("click", function () {
+    kickCount++;
+    $("#kickCount").text(kickCount);
+    saveLocalData();
+  });
+
+  $("#resetKicks").on("click", function () {
+    kickCount = 0;
+    $("#kickCount").text(kickCount);
+    saveLocalData();
   });
 
   $("#dateForm").on("submit", function (e) {
@@ -80,7 +155,18 @@ $(document).ready(function () {
     });
     recHTML += "</ul>";
 
+    // Trimester Display
+    const trimester = trimesters.find(t => weeks >= t.range[0] && weeks <= t.range[1]);
+    $("#trimesterText").html(trimester ? trimester.label : "N/A");
+
+    // Nutrition and Notes
+    $("#nutritionText").html("<ul><li>" + nutritionAdvice.join("</li><li>") + "</li></ul>");
+    $("#dearMomNote").text(dearMomNotes[weeks] || dearMomNotes.default);
+
     $("#recommendations").html(recHTML);
-    $("#results").removeClass("d-none");
+    $("#results, #trimesterInfo, #nutritionAdvice, #dearMomSection, #kickCounter, #printSummarySection").removeClass("d-none");
+    
+    saveLocalData();
   });
+  loadLocalData();
 });
