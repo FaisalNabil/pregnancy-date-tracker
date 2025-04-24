@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pregnancy Date Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Pregnancy Date Calculator</h1>
+      <p>Track your pregnancy weeks, due date, and important test milestones.</p>
+    </header>
+
+    <section class="form-section">
+      <form id="dateForm">
+        <label for="calcMethod">Choose Calculation Method:</label>
+        <select id="calcMethod">
+          <option value="lmp">LMP (Last Menstrual Period)</option>
+          <option value="conception">Conception Date</option>
+        </select>
+
+        <label for="dateInput">Enter Date:</label>
+        <input type="date" id="dateInput" required />
+
+        <button type="submit">Calculate</button>
+      </form>
+    </section>
+
+    <section class="results" id="results" style="display: none;">
+      <h2>Results</h2>
+      <div id="weekInfo"></div>
+      <div id="dueDate"></div>
+      <div id="testTimeline"></div>
+    </section>
+
+    <footer>
+      <p>Made with ❤️ to support healthy motherhood</p>
+    </footer>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
