@@ -3,46 +3,116 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pregnancy Date Calculator</title>
+  <title>Pregnancy Date Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Pregnancy Date Calculator</h1>
-      <p>Track your pregnancy weeks, due date, and important test milestones.</p>
-    </header>
+  <div class="container py-5">
+    <div class="text-center mb-4">
+      <h1 class="fw-bold">Pregnancy Date Tracker</h1>
+      <p class="text-muted">Track your weeks, EDD, and test schedule — all in your browser.</p>
+    </div>
 
-    <section class="form-section">
-      <form id="dateForm">
-        <label for="calcMethod">Choose Calculation Method:</label>
-        <select id="calcMethod">
+    <form id="dateForm" class="card p-4 shadow-sm">
+      <div class="mb-3">
+        <label for="calcMethod" class="form-label">Choose a Method</label>
+        <select id="calcMethod" class="form-select" required>
           <option value="lmp">LMP (Last Menstrual Period)</option>
           <option value="conception">Conception Date</option>
+          <option value="edd">EDD (Expected Due Date)</option>
+          <option value="scan">Scan Date + GA</option>
         </select>
+      </div>
 
-        <label for="dateInput">Enter Date:</label>
-        <input type="date" id="dateInput" required />
+      <div class="mb-3">
+        <label for="dateInput" class="form-label">Enter the Date</label>
+        <input type="text" id="dateInput" class="form-control" placeholder="Select date..." />
+      </div>
 
-        <button type="submit">Calculate</button>
-      </form>
-    </section>
+      <div id="scanInputs" class="row g-2 mt-2 d-none">
+        <div class="col-md-4">
+          <label class="form-label">Scan Date</label>
+          <input type="text" id="scanDate" class="form-control" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">GA Weeks</label>
+          <input type="number" id="scanWeeks" class="form-control" min="0" max="42" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">GA Days</label>
+          <input type="number" id="scanDays" class="form-control" min="0" max="6" />
+        </div>
+      </div>
 
-    <section class="results" id="results" style="display: none;">
-      <h2>Results</h2>
-      <div id="weekInfo"></div>
-      <div id="dueDate"></div>
-      <div id="testTimeline"></div>
-    </section>
+      <button type="submit" class="btn btn-primary w-100 mt-3">Calculate</button>
+    </form>
 
-    <footer>
-      <p>Made with ❤️ to support healthy motherhood</p>
-    </footer>
+    <div id="results" class="card p-4 mt-4 shadow-sm d-none">
+      <h4 class="mb-3">Your Pregnancy Summary</h4>
+      <div id="summaryText" class="mb-3"></div>
+      <div id="recommendations"></div>
+    </div>
+    <div class="text-end mt-3">
+      <a href="#" data-bs-toggle="modal" data-bs-target="#calcLogicModal" class="btn btn-link">How is this calculated?</a>
+    </div>
+    
   </div>
-
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <div class="modal fade" id="calcLogicModal" tabindex="-1" aria-labelledby="calcLogicModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="calcLogicModalLabel">Calculation Methodology</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6>🔢 General Pregnancy Calculation Assumptions</h6>
+          <ul>
+            <li>Full-term pregnancy is assumed to be <strong>280 days (40 weeks)</strong> from LMP.</li>
+            <li>Each month ≈ 4 weeks, but some months are longer.</li>
+            <li>Gestational Age (GA) includes the 2 weeks before conception.</li>
+          </ul>
+          <hr>
+          <h6>📅 Methods Explained</h6>
+          <ul>
+            <li><strong>LMP (Last Menstrual Period):</strong><br>
+                GA = Today's Date - LMP Date<br>
+                EDD = LMP + 280 days
+            </li>
+            <li><strong>Conception Date:</strong><br>
+                GA = Today's Date - Conception Date<br>
+                EDD = Conception + 266 days
+            </li>
+            <li><strong>EDD (Expected Due Date):</strong><br>
+                GA = 280 - (EDD - Today's Date)<br>
+                EDD is taken as the fixed input.
+            </li>
+            <li><strong>Scan Date + Gestational Age:</strong><br>
+                EDD = Scan Date + (280 - GA at scan)<br>
+                This is considered the most accurate method if available.
+            </li>
+          </ul>
+          <hr>
+          <h6>🧠 Notes</h6>
+          <ul>
+            <li>Results are for general reference. Always follow medical advice.</li>
+            <li>Ultrasound-based dating (CRL) is often more accurate than LMP.</li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
