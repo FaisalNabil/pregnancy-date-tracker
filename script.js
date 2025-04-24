@@ -18,14 +18,14 @@ $(document).ready(function () {
     { range: [36, 40], name: "Position Scan / GBS Test" }
   ];
 
-  const congratulations = {
-    6: "Your journey just began. Take care and rest well. 🌼",
-    12: "First trimester almost complete! 🎉 Time for an NT scan maybe?",
-    20: "Halfway there! Your baby is growing strong 💪",
-    28: "You're in the third trimester now. 🍼 Preparing for parenthood!",
-    36: "Almost time to meet your little one! Pack your hospital bag 👶",
-    default: "You're doing amazing, mama! 💖 Keep glowing!"
-  };
+  const congratulations = [
+    { range: [4, 8], msg: "Your journey just began. Take care and rest well. 🌼" },
+    { range: [9, 13], msg: "First trimester almost complete! 🎉 Time for an NT scan maybe?" },
+    { range: [14, 26], msg: "Halfway there! Your baby is growing strong 💪" },
+    { range: [27, 35], msg: "You're in the third trimester now. 🍼 Preparing for parenthood!" },
+    { range: [36, 40], msg: "Almost time to meet your little one! Pack your hospital bag 👶" }
+  ];
+  const defaultMessage = "You're doing amazing, mama! 💖 Keep glowing!";
 
   const trimesters = [
     { range: [0, 13], label: "First Trimester: Building foundations 🧬" },
@@ -133,7 +133,9 @@ $(document).ready(function () {
 
     const weeks = Math.floor(gestationalAgeInDays / 7);
     const days = gestationalAgeInDays % 7;
-    const congratsMsg = congratulations[weeks] || congratulations.default;
+    const match = congratulations.find(c => weeks >= c.range[0] && weeks <= c.range[1]);
+    const congratsMsg = match ? match.msg : defaultMessage;
+
 
     const summary = `
       <strong>Current Gestational Age:</strong> ${weeks} weeks and ${days} days<br>
