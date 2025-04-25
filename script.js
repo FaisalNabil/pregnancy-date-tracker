@@ -28,10 +28,31 @@ $(document).ready(function () {
   const defaultMessage = "You're doing amazing, mama! 💖 Keep glowing!";
 
   const trimesters = [
-    { range: [0, 13], label: "First Trimester: Building foundations 🧬" },
-    { range: [14, 27], label: "Second Trimester: Growing and glowing ✨" },
-    { range: [28, 40], label: "Third Trimester: Getting ready for birth 👶" }
-  ];
+    {
+      range: [0, 13],
+      label: `
+        <strong>First Trimester (Week 1–13)</strong><br>
+        Your body is adjusting to pregnancy. It's common to feel <em>fatigue, nausea (morning sickness), breast tenderness</em>, and emotional ups and downs.<br>
+        <strong class="text-danger">⚠️ If vomiting prevents you from keeping fluids down, consult a doctor.</strong>
+      `
+    },
+    {
+      range: [14, 27],
+      label: `
+        <strong>Second Trimester (Week 14–27)</strong><br>
+        Energy usually improves. You may experience <em>backaches, leg cramps, stretch marks, mild swelling</em>, and feel the baby move.<br>
+        <strong class="text-danger">⚠️ Sudden swelling, headaches, or blurred vision? Contact a doctor immediately.</strong>
+      `
+    },
+    {
+      range: [28, 40],
+      label: `
+        <strong>Third Trimester (Week 28–40)</strong><br>
+        Expect <em>frequent urination, insomnia, shortness of breath, Braxton Hicks contractions</em> as baby grows.<br>
+        <strong class="text-danger">⚠️ If you experience fluid leakage, bleeding, or painful regular contractions — seek care now.</strong>
+      `
+    }
+  ];  
 
   const nutritionAdvice = [
     "Eat iron-rich foods like lentils, spinach, and fish.",
