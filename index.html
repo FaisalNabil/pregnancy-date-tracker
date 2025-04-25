@@ -4,21 +4,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pregnancy Date Tracker</title>
-  <link rel="icon" type="image/png" href="6371247.jpg">
+  <link rel="icon" type="image/png" href="favicon.png" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container py-5">
+  <div class="container py-4">
     <div class="text-center mb-4">
       <img src="logo.png" alt="Pregnancy Tracker Logo" style="max-width: 120px;" class="mb-3">
       <h1 class="fw-bold">Pregnancy Date Tracker</h1>
       <p class="text-muted">Track your weeks, EDD, tests, nutrition, and more — all in your browser.</p>
-    </div>    
+    </div>
 
-    <form id="dateForm" class="card p-4 shadow-sm">
+    <!-- Tabs for sections -->
+    <ul class="nav nav-tabs mb-4" id="sectionTabs" role="tablist">
+      <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabSummary">Summary</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabMilestones">Milestones</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabNutrition">Nutrition</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabDearMom">Dear Parent</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabKicks">Kick Counter</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabAbout">About</button></li>
+    </ul>
+
+    <!-- Tabs Content -->
+    <div class="tab-content" id="sectionTabsContent">
+      <div class="tab-pane fade show active" id="tabSummary">
+        
+
+    <form id="dateForm" class="card p-4 shadow-sm mb-4">
       <div class="mb-3">
         <label for="calcMethod" class="form-label">Choose a Method</label>
         <select id="calcMethod" class="form-select" required>
@@ -51,92 +66,91 @@
 
       <button type="submit" class="btn btn-primary w-100 mt-3">Calculate</button>
     </form>
-
-    <!-- Results -->
-    <div id="results" class="mt-5 d-none">
-      <div class="card p-4 shadow-sm mb-4">
-        <h4>Your Pregnancy Summary</h4>
-        <div id="summaryText" class="mb-3"></div>
-        <div id="recommendations"></div>
+        <div class="card p-4 shadow-sm mb-4">
+          <h4>Your Pregnancy Summary</h4>
+          <div id="summaryText" class="mb-3"></div>
+          <div id="recommendations"></div>
+        </div>
       </div>
-
-      <div class="card p-4 shadow-sm mb-4">
-        <h5>Trimester Milestones</h5>
-        <div id="trimesterText"></div>
+      <div class="tab-pane fade" id="tabMilestones">
+        <div class="card p-4 shadow-sm mb-4">
+          <h5>Trimester Milestones</h5>
+          <div id="trimesterText"></div>
+        </div>
       </div>
-
-      <div class="card p-4 shadow-sm mb-4">
-        <h5>Nutrition & Supplements</h5>
-        <div id="nutritionText"></div>
+      <div class="tab-pane fade" id="tabNutrition">
+        <div class="card p-4 shadow-sm mb-4">
+          <h5>Nutrition & Supplements</h5>
+          <div id="nutritionText"></div>
+        </div>
       </div>
-
-      <div class="card p-4 shadow-sm mb-4">
-        <h5>Dear Parent 💌</h5>
-        <div id="dearMomNote" class="fst-italic"></div>
+      <div class="tab-pane fade" id="tabDearMom">
+        <div class="card p-4 shadow-sm mb-4">
+          <h5>Dear Parent 💌</h5>
+          <div id="dearMomNote" class="fst-italic"></div>
+        </div>
       </div>
-
-      <div class="card p-4 shadow-sm mb-4">
-        <h5>Kick Counter</h5>
-        <div class="row mb-2">
-          <div class="col-auto">
-            <button id="kickButton" class="btn btn-outline-primary">👣 Register Kick</button>
+      <div class="tab-pane fade" id="tabKicks">
+        <div class="card p-4 shadow-sm mb-4">
+          <h5>Kick Counter</h5>
+          <div class="row mb-2">
+            <div class="col-auto">
+              <button id="kickButton" class="btn btn-outline-primary">👣 Register Kick</button>
+            </div>
+            <div class="col-auto">
+              <button id="resetKicks" class="btn btn-outline-danger">Reset</button>
+            </div>
           </div>
-          <div class="col-auto">
-            <button id="resetKicks" class="btn btn-outline-danger">Reset</button>
+          <p>Total kicks today: <strong id="kickCount">0</strong></p>
+          <div class="d-flex justify-content-between align-items-center my-3">
+            <div>
+              <label for="kickDateSelector" class="form-label mb-0">Select Date</label>
+              <input type="text" id="kickDateSelector" class="form-control d-inline-block w-auto" />
+            </div>
+            <div>
+              <label for="blockRange" class="form-label mb-0">Show by</label>
+              <select id="blockRange" class="form-select d-inline-block w-auto">
+                <option value="24">Full Day</option>
+                <option value="12">12 Hours</option>
+                <option value="6" selected>6 Hours</option>
+              </select>
+            </div>
+          </div>
+          <div id="kickBreakdown" class="mt-3"></div>
+          <div id="recentKickHistory" class="mt-4"></div>
+          <hr>
+          <h6>Add Manual Kicks</h6>
+          <div class="row g-2 align-items-end">
+            <div class="col-md-5">
+              <label for="manualKickDate" class="form-label">Date</label>
+              <input type="text" id="manualKickDate" class="form-control" />
+            </div>
+            <div class="col-md-5">
+              <label for="manualKickCount" class="form-label">How many kicks?</label>
+              <input type="number" id="manualKickCount" class="form-control" min="1" />
+            </div>
+            <div class="col-md-2">
+              <button id="manualKickAdd" class="btn btn-success w-100">Add</button>
+            </div>
           </div>
         </div>
-        <p class="mt-2">Total kicks today: <strong id="kickCount">0</strong></p>
-        <div class="d-flex justify-content-between align-items-center my-3">
-          <div>
-            <label for="kickDateSelector" class="form-label mb-0">Select Date</label>
-            <input type="text" id="kickDateSelector" class="form-control d-inline-block w-auto" />
-          </div>
-          <div>
-            <label for="blockRange" class="form-label mb-0">Show by</label>
-            <select id="blockRange" class="form-select d-inline-block w-auto">
-              <option value="24">Full Day</option>
-              <option value="12">12 Hours</option>
-              <option value="6" selected>6 Hours</option>
-            </select>
-          </div>
-        </div>
-        
-        <div id="kickBreakdown" class="mt-3"></div>
-        
-        <div id="recentKickHistory" class="mt-4"></div>
-        
-        <hr>
-        <h6>Add Manual Kicks</h6>
-        <div class="row g-2 align-items-end">
-          <div class="col-md-5">
-            <label for="manualKickDate" class="form-label">Date</label>
-            <input type="text" id="manualKickDate" class="form-control" />
-          </div>
-          <div class="col-md-5">
-            <label for="manualKickCount" class="form-label">How many kicks?</label>
-            <input type="number" id="manualKickCount" class="form-control" min="1" />
-          </div>
-          <div class="col-md-2">
-            <button id="manualKickAdd" class="btn btn-success w-100">Add</button>
-          </div>
-        </div>
-
       </div>
-
-      <div class="text-center mt-3">
-        <button onclick="window.print()" class="btn btn-outline-secondary">🖨️ Print / Save Summary</button>
-      </div>
-      <div class="text-center mt-3">
-        <button class="btn btn-sm btn-danger mt-2" onclick="localStorage.clear(); location.reload();">
-          🗑️ Clear My Tracker Data
-        </button>
+      <div class="tab-pane fade" id="tabAbout">
+        <div class="card p-4 shadow-sm">
+          <h5>About this tool</h5>
+          <p class="text-muted">This pregnancy tracker was created with love and care to help expectant parents track vital dates and moments in an intuitive and secure way — without sign-ups, without ads, and all on your device.</p>
+          <p class="text-muted small">Dedicated to my loving wife <strong>Sarmin Sultana</strong> and our unborn child 💛 — <br/>by <a href="https://www.linkedin.com/in/tousif-md-amin-faisal/" target="_blank">Tousif Md Amin Faisal</a>.</p>
+        </div>
       </div>
     </div>
 
-    <!-- Calculation Info -->
     <div class="text-end mt-4">
       <a href="#" data-bs-toggle="modal" data-bs-target="#calcLogicModal" class="btn btn-link">How is this calculated?</a>
     </div>
+
+    <footer class="text-center text-muted mt-5 mb-3 small">
+      Made with ❤️ by <a href="https://www.linkedin.com/in/tousif-md-amin-faisal/" target="_blank">Tousif Md Amin Faisal</a> & OpenAI
+    </footer>
   </div>
 
   <!-- Modal -->
@@ -157,22 +171,10 @@
           <hr>
           <h6>📅 Methods Explained</h6>
           <ul>
-            <li><strong>LMP (Last Menstrual Period):</strong><br>
-                GA = Today's Date - LMP Date<br>
-                EDD = LMP + 280 days
-            </li>
-            <li><strong>Conception Date:</strong><br>
-                GA = Today's Date - Conception Date<br>
-                EDD = Conception + 266 days
-            </li>
-            <li><strong>EDD (Expected Due Date):</strong><br>
-                GA = 280 - (EDD - Today's Date)<br>
-                EDD is taken as the fixed input.
-            </li>
-            <li><strong>Scan Date + Gestational Age:</strong><br>
-                EDD = Scan Date + (280 - GA at scan)<br>
-                This is considered the most accurate method if available.
-            </li>
+            <li><strong>LMP (Last Menstrual Period):</strong><br> GA = Today's Date - LMP Date<br> EDD = LMP + 280 days</li>
+            <li><strong>Conception Date:</strong><br> GA = Today's Date - Conception Date<br> EDD = Conception + 266 days</li>
+            <li><strong>EDD (Expected Due Date):</strong><br> GA = 280 - (EDD - Today's Date)</li>
+            <li><strong>Scan Date + Gestational Age:</strong><br> EDD = Scan Date + (280 - GA at scan)</li>
           </ul>
           <hr>
           <h6>🧠 Notes</h6>
@@ -197,9 +199,4 @@
   <script src="script.js"></script>
   <script src="kickCounterModule.js"></script>
 </body>
-<footer class="text-center text-muted mt-5 mb-3 small">
-  Made with ❤️ by 
-  <a href="https://www.linkedin.com/in/tousif-md-amin-faisal/" target="_blank">Tousif Md Amin Faisal</a> 
-  & OpenAI
-</footer>
 </html>
