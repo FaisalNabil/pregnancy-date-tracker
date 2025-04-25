@@ -220,16 +220,28 @@ $(document).ready(function () {
   
     let html = "<ul class='list-group'>";
     meds.forEach((med, index) => {
-      const meals = med.meals.join(", ");
+      let medLine = `<strong>${med.name}</strong>`;
+
+      if (med.meals.length > 0) {
+        const mealParts = med.meals.map(m => `${med.timing} ${m} (${med.dosage})`);
+        medLine += ` — ${mealParts.join(", ")}`;
+      }
+
+      if (med.schedule && med.schedule.trim() !== "") {
+        if (medLine.includes("—")) medLine += "; ";
+        else medLine += " — ";
+        medLine += med.schedule.includes("every")
+          ? `every ${med.schedule.replace("every", "").trim()}`
+          : `at ${med.schedule}`;
+      }
+
       html += `
         <li class='list-group-item d-flex justify-content-between align-items-center'>
-          <div>
-            <strong>${med.name}</strong> — ${med.dosage} tab(s), ${med.timing} ${meals}, 
-            ${med.schedule.includes("every") ? med.schedule : "at " + med.schedule}
-          </div>
+          <div>${medLine}</div>
           <button class="btn btn-sm btn-outline-danger" onclick="removeMedication(${index})">Remove</button>
         </li>
       `;
+
     });
     html += "</ul>";
     $("#medList").html(html);
