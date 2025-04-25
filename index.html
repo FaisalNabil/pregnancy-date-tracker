@@ -82,6 +82,44 @@
         <div class="card p-4 shadow-sm mb-4">
           <h5>Nutrition & Supplements</h5>
           <div id="nutritionText"></div>
+          <hr>
+          <h5 class="mt-4">💊 Suggested Medications</h5>
+          <div class="row g-2 mb-3">
+            <div class="col-md-3">
+              <input type="text" class="form-control" id="medName" placeholder="Medicine name" />
+            </div>
+            <div class="col-md-2">
+              <input type="text" class="form-control" id="medDosage" placeholder="Dosage (e.g. 1, ½)" />
+            </div>
+            <div class="col-md-2">
+              <select class="form-select" id="medTiming">
+                <option value="before">Before food</option>
+                <option value="after">After food</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <div class="form-label">Select Meals</div>
+              <div id="mealButtons" class="btn-group w-100 mb-2" role="group" aria-label="Meal selection">
+                <input type="checkbox" class="btn-check" id="mealBreakfast" value="breakfast" autocomplete="off">
+                <label class="btn btn-outline-secondary" for="mealBreakfast">Breakfast</label>
+
+                <input type="checkbox" class="btn-check" id="mealLunch" value="lunch" autocomplete="off">
+                <label class="btn btn-outline-secondary" for="mealLunch">Lunch</label>
+
+                <input type="checkbox" class="btn-check" id="mealDinner" value="dinner" autocomplete="off">
+                <label class="btn btn-outline-secondary" for="mealDinner">Dinner</label>
+              </div>
+
+            </div>
+            <div class="col-md-2">
+              <input type="text" class="form-control" id="medClockTime" placeholder="Time or every xh" />
+            </div>
+          </div>
+          <div class="text-end mb-3">
+            <button id="addMedBtn" class="btn btn-success">➕ Add Medicine</button>
+          </div>
+          <div id="medList" class="mt-3"></div>
+                    
         </div>
       </div>
       <div class="tab-pane fade" id="tabDearMom">

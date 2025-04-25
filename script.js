@@ -192,4 +192,73 @@ $(document).ready(function () {
     saveLocalData();
   });
   loadLocalData();
+
+  function loadMedications() {
+    const meds = JSON.parse(localStorage.getItem("medications") || "[]");
+    renderMedications(meds);
+  }
+  
+  function saveMedication(med) {
+    const meds = JSON.parse(localStorage.getItem("medications") || "[]");
+    meds.push(med);
+    localStorage.setItem("medications", JSON.stringify(meds));
+    renderMedications(meds);
+  }
+  
+  function removeMedication(index) {
+    const meds = JSON.parse(localStorage.getItem("medications") || "[]");
+    meds.splice(index, 1);
+    localStorage.setItem("medications", JSON.stringify(meds));
+    renderMedications(meds);
+  }
+  
+  function renderMedications(meds) {
+    if (meds.length === 0) {
+      $("#medList").html("<p class='text-muted'>No medications added yet.</p>");
+      return;
+    }
+  
+    let html = "<ul class='list-group'>";
+    meds.forEach((med, index) => {
+      const meals = med.meals.join(", ");
+      html += `
+        <li class='list-group-item d-flex justify-content-between align-items-center'>
+          <div>
+            <strong>${med.name}</strong> — ${med.dosage} tab(s), ${med.timing} ${meals}, 
+            ${med.schedule.includes("every") ? med.schedule : "at " + med.schedule}
+          </div>
+          <button class="btn btn-sm btn-outline-danger" onclick="removeMedication(${index})">Remove</button>
+        </li>
+      `;
+    });
+    html += "</ul>";
+    $("#medList").html(html);
+  }
+  
+  $("#addMedBtn").on("click", function () {
+    const name = $("#medName").val().trim();
+    const dosage = $("#medDosage").val().trim() || "1";
+    const timing = $("#medTiming").val();
+    const schedule = $("#medClockTime").val().trim();
+    const meals = [];
+      if ($("#mealBreakfast").is(":checked")) meals.push("breakfast");
+      if ($("#mealLunch").is(":checked")) meals.push("lunch");
+      if ($("#mealDinner").is(":checked")) meals.push("dinner");
+
+    if (!name || !schedule || !meals.length) {
+      alert("Please enter name, timing, and at least one meal.");
+      return;
+    }
+  
+    saveMedication({ name, dosage, timing, meals, schedule });
+    $("#medName").val("");
+    $("#medDosage").val("");
+    $("#medClockTime").val("");
+    $("#medMeals").val([]).trigger("change");
+  });
+  
+  // Enable global removal
+  window.removeMedication = removeMedication;
+  loadMedications();
+  
 });
