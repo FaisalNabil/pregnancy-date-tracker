@@ -241,14 +241,18 @@ $(document).ready(function () {
     const timing = $("#medTiming").val();
     const schedule = $("#medClockTime").val().trim();
     const meals = [];
-      if ($("#mealBreakfast").is(":checked")) meals.push("breakfast");
-      if ($("#mealLunch").is(":checked")) meals.push("lunch");
-      if ($("#mealDinner").is(":checked")) meals.push("dinner");
+    $(".btn-check:checked").each(function () {
+      meals.push($(this).val());
+    });
 
-    if (!name || !schedule || !meals.length) {
-      alert("Please enter name, timing, and at least one meal.");
+    if (!name) {
+      alert("Please enter a medicine name.");
       return;
     }
+    if (!schedule && meals.length === 0) {
+      alert("Please either select meals (Breakfast/Lunch/Dinner) or provide a time/interval.");
+      return;
+    }    
   
     saveMedication({ name, dosage, timing, meals, schedule });
     $("#medName").val("");
