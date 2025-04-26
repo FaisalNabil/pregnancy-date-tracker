@@ -246,32 +246,62 @@ $(document).ready(function () {
     html += "</ul>";
     $("#medList").html(html);
   }
+  $("#medClockTime").on("input", function () {
+    const val = $(this).val().trim().toLowerCase();
+    const hasTime = val.includes(":") || val.includes("every");
+  
+    if (hasTime) {
+      // Disable meal selections & timing
+      $("#mealButtons input").prop("disabled", true).prop("checked", false);
+      $("#medTiming").prop("disabled", true);
+    } else {
+      // Enable meal options
+      $("#mealButtons input").prop("disabled", false);
+      $("#medTiming").prop("disabled", false);
+    }
+  });
   
   $("#addMedBtn").on("click", function () {
     const name = $("#medName").val().trim();
     const dosage = $("#medDosage").val().trim() || "1";
-    const timing = $("#medTiming").val();
     const schedule = $("#medClockTime").val().trim();
+    const isTimeBased = schedule && (schedule.includes(":") || schedule.toLowerCase().includes("every"));
     const meals = [];
-    $(".btn-check:checked").each(function () {
-      meals.push($(this).val());
-    });
-
+    if ($("#mealBreakfast").is(":checked")) meals.push("breakfast");
+    if ($("#mealLunch").is(":checked")) meals.push("lunch");
+    if ($("#mealDinner").is(":checked")) meals.push("dinner");
+  
     if (!name) {
       alert("Please enter a medicine name.");
       return;
     }
-    if (!schedule && meals.length === 0) {
-      alert("Please either select meals (Breakfast/Lunch/Dinner) or provide a time/interval.");
-      return;
-    }    
   
-    saveMedication({ name, dosage, timing, meals, schedule });
+    if (!isTimeBased && meals.length === 0) {
+      alert("Please select at least one meal or enter a schedule (time or interval).");
+      return;
+    }
+  
+    const timing = isTimeBased ? "" : $("#medTiming").val() || "";
+  
+    const medication = {
+      name,
+      dosage,
+      timing,
+      meals,
+      schedule
+    };
+  
+    saveMedication(medication);
+  
+    // Clear inputs
     $("#medName").val("");
     $("#medDosage").val("");
     $("#medClockTime").val("");
-    $("#medMeals").val([]).trigger("change");
+    $("#medTiming").val("before");
+    $("#mealBreakfast, #mealLunch, #mealDinner").prop("checked", false).prop("disabled", false);
+    $("#medTiming").prop("disabled", false);
   });
+  
   
   // Enable global removal
   window.removeMedication = removeMedication;

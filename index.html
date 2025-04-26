@@ -93,28 +93,29 @@
             </div>
             <div class="col-md-2">
               <select class="form-select" id="medTiming">
+                <option value="">Select Timing</option>
                 <option value="before">Before food</option>
                 <option value="after">After food</option>
               </select>
             </div>
             <div class="col-md-3">
-              <div class="form-label">Select Meals</div>
-              <div id="mealButtons" class="btn-group w-100 mb-2" role="group" aria-label="Meal selection">
+              <label class="form-label small mb-1">Meals</label>
+              <div id="mealButtons" class="btn-group w-100" role="group" aria-label="Meal selection">
                 <input type="checkbox" class="btn-check" id="mealBreakfast" value="breakfast" autocomplete="off">
                 <label class="btn btn-outline-secondary" for="mealBreakfast">Breakfast</label>
-
                 <input type="checkbox" class="btn-check" id="mealLunch" value="lunch" autocomplete="off">
                 <label class="btn btn-outline-secondary" for="mealLunch">Lunch</label>
-
                 <input type="checkbox" class="btn-check" id="mealDinner" value="dinner" autocomplete="off">
                 <label class="btn btn-outline-secondary" for="mealDinner">Dinner</label>
               </div>
-
+              <div class="form-text small text-muted">Skip if using a time-based schedule</div>
             </div>
             <div class="col-md-2">
-              <input type="text" class="form-control" id="medClockTime" placeholder="Time or every xh" />
+              <input type="text" class="form-control" id="medClockTime" placeholder="08:00 or every 6h" />
+              <div class="form-text small text-muted">Time (HH:MM) or interval (e.g. every 6h)</div>
             </div>
           </div>
+          
           <div class="text-end mb-3">
             <button id="addMedBtn" class="btn btn-success">➕ Add Medicine</button>
           </div>
@@ -236,5 +237,14 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script.js"></script>
   <script src="kickCounterModule.js"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTGXPT64WE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LTGXPT64WE');
+  </script>
 </body>
 </html>
