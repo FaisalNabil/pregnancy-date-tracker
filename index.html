@@ -21,6 +21,7 @@
     <!-- Tabs for sections -->
     <ul class="nav nav-tabs mb-4" id="sectionTabs" role="tablist">
       <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabSummary">Summary</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabWeekCalc" role="tab">Week Finder</button></li>
       <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabMilestones">Milestones</button></li>
       <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabNutrition">Nutrition</button></li>
       <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabDearMom">Dear Parent</button></li>
@@ -33,45 +34,83 @@
       <div class="tab-pane fade show active" id="tabSummary">
         
 
-    <form id="dateForm" class="card p-4 shadow-sm mb-4">
-      <div class="mb-3">
-        <label for="calcMethod" class="form-label">Choose a Method</label>
-        <select id="calcMethod" class="form-select" required>
-          <option value="lmp">LMP (Last Menstrual Period)</option>
-          <option value="conception">Conception Date</option>
-          <option value="edd">EDD (Expected Due Date)</option>
-          <option value="scan">Scan Date + GA</option>
-        </select>
-      </div>
+        <form id="dateForm" class="card p-4 shadow-sm mb-4">
+          <div class="mb-3">
+            <label for="calcMethod" class="form-label">Choose a Method</label>
+            <select id="calcMethod" class="form-select" required>
+              <option value="lmp">LMP (Last Menstrual Period)</option>
+              <option value="conception">Conception Date</option>
+              <option value="edd">EDD (Expected Due Date)</option>
+              <option value="scan">Scan Date + GA</option>
+            </select>
+          </div>
 
-      <div class="mb-3">
-        <label for="dateInput" class="form-label">Enter the Date</label>
-        <input type="text" id="dateInput" class="form-control" placeholder="Select date..." />
-      </div>
+          <div class="mb-3">
+            <label for="dateInput" class="form-label">Enter the Date</label>
+            <input type="text" id="dateInput" class="form-control" placeholder="Select date..." />
+          </div>
 
-      <div id="scanInputs" class="row g-2 mt-2 d-none">
-        <div class="col-md-4">
-          <label class="form-label">Scan Date</label>
-          <input type="text" id="scanDate" class="form-control" />
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">GA Weeks</label>
-          <input type="number" id="scanWeeks" class="form-control" min="0" max="42" />
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">GA Days</label>
-          <input type="number" id="scanDays" class="form-control" min="0" max="6" />
-        </div>
-      </div>
+          <div id="scanInputs" class="row g-2 mt-2 d-none">
+            <div class="col-md-4">
+              <label class="form-label">Scan Date</label>
+              <input type="text" id="scanDate" class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">GA Weeks</label>
+              <input type="number" id="scanWeeks" class="form-control" min="0" max="42" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">GA Days</label>
+              <input type="number" id="scanDays" class="form-control" min="0" max="6" />
+            </div>
+          </div>
 
-      <button type="submit" class="btn btn-primary w-100 mt-3">Calculate</button>
-    </form>
+          <button type="submit" class="btn btn-primary w-100 mt-3">Calculate</button>
+        </form>
         <div class="card p-4 shadow-sm mb-4">
           <h4>Your Pregnancy Summary</h4>
           <div id="summaryText" class="mb-3"></div>
           <div id="recommendations"></div>
         </div>
       </div>
+
+      <div class="tab-pane fade" id="tabWeekCalc" role="tabpanel">
+        <div class="card p-4 shadow-sm mb-4">
+          <h5>Check Weeks on a Specific Date</h5>
+          <p class="text-muted small">Based on your saved due date.</p>
+          
+          <div class="row g-2 mb-3">
+            <div class="col-md-6">
+              <label for="checkWeeksDate" class="form-label">Pick a Date</label>
+              <input type="text" id="checkWeeksDate" class="form-control" placeholder="e.g. Jul 1, 2025" />
+            </div>
+            <div class="col-md-6 d-flex align-items-end">
+              <button id="checkWeeksBtn" class="btn btn-outline-primary w-100">What will be my gestational age?</button>
+            </div>
+          </div>
+          <div id="checkWeeksResult" class="mb-4 fw-semibold"></div>
+      
+          <hr class="my-4">
+      
+          <h5>Find Date for a Specific Week</h5>
+          <p class="text-muted small">Enter how many weeks and days you'd like to check.</p>
+          <div class="row g-2 mb-3">
+            <div class="col-md-4">
+              <label for="targetWeeks" class="form-label">Weeks</label>
+              <input type="number" id="targetWeeks" class="form-control" min="0" max="42" placeholder="e.g. 30" />
+            </div>
+            <div class="col-md-4">
+              <label for="targetDays" class="form-label">Days</label>
+              <input type="number" id="targetDays" class="form-control" min="0" max="6" placeholder="0–6" />
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <button id="findDateForWeekBtn" class="btn btn-outline-success w-100">Which date will that be?</button>
+            </div>
+          </div>
+          <div id="findDateResult" class="fw-semibold"></div>
+        </div>
+      </div>          
+
       <div class="tab-pane fade" id="tabMilestones">
         <div class="card p-4 shadow-sm mb-4">
           <h5>Trimester Milestones</h5>
@@ -235,8 +274,13 @@
   <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="script.js"></script>
-  <script src="kickCounterModule.js"></script>
+  
+  <script src="js/modules/shared/constants.js"></script>
+  <script src="js/modules/localStorageUtil.js"></script>
+  <script src="js/modules/dateCalculator.js"></script>
+  <script src="js/modules/medicationTracker.js"></script>
+  <script src="js/kickCounterModule.js"></script>
+  
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTGXPT64WE"></script>
   <script>

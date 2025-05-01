@@ -136,6 +136,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("kickButton").addEventListener("click", () => {
     recordKick();
     displayKicksFor(today, selectedBlockHours);
+
+    const todayLog = loadKickLog()[today];
+    const totalKicks = (todayLog?.log?.length || 0) + (todayLog?.manual || 0);
+    document.getElementById("kickCount").textContent = totalKicks;
   });
 
   document.getElementById("resetKicks").addEventListener("click", () => {
@@ -143,6 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
     delete log[today];
     saveKickLog(log);
     displayKicksFor(today, selectedBlockHours);
+    document.getElementById("kickCount").textContent = "0";
   });
 
   // Block Range Change
