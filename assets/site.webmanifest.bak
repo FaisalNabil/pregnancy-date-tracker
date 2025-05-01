@@ -1,6 +1,6 @@
 {
-  "name": "Pregnancy Date Tracker",
-  "short_name": "PDT",
+  "name": "pregnancy-date-tracker",
+  "short_name": "pregnancy-date-tracker",
   "icons": [
     {
       "src": "assets/web-app-manifest-192x192.png",
